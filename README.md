@@ -140,4 +140,4 @@ npm run test:ui       # modo visual do Playwright, para depurar
 
 ---
 
-Feito por **Haian Vilas Boas**, QA. [LinkedIn](https://www.linkedin.com/in/haian-vilas-boas-806647221/) · [Portfólio](https://haianportifolio.framer.website/)
+Feito por **Haian Vilas Boas**, QA. [LinkedIn](https://www.linkedin.com/in/haian-vilas-boas-806647221/) · [Portfólio](https://dev-haian.github.io/)
