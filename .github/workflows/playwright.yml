@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: '0 11 * * 1-5' # dias úteis, 8h (horário de Brasília)
   workflow_dispatch:
+    inputs:
+      viewport:
+        description: 'Resoluções (fullhd, notebook, tablet, mobile ou all)'
+        default: 'all'
 
 permissions:
   contents: read
@@ -20,9 +24,11 @@ concurrency:
 
 jobs:
   test:
-    name: E2E + API
+    name: Health check + E2E + API
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
+    env:
+      TEST_VIEWPORT: ${{ github.event.inputs.viewport || 'all' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -37,11 +43,37 @@ jobs:
       - name: Checar tipos (TypeScript)
         run: npm run typecheck
 
+      # Guarda o último estado de cada serviço para detectar "caiu" e "voltou"
+      - name: Restaurar estado do health check
+        uses: actions/cache/restore@v4
+        with:
+          path: health-results/state.json
+          key: health-state-${{ github.run_id }}
+          restore-keys: health-state-
+
+      - name: Health check dos serviços
+        run: npm run health
+        env:
+          HEALTH_WEBHOOK_URL: ${{ secrets.HEALTH_WEBHOOK_URL }}
+
+      - name: Salvar estado do health check
+        if: ${{ !cancelled() }}
+        uses: actions/cache/save@v4
+        with:
+          path: health-results/state.json
+          key: health-state-${{ github.run_id }}
+
       - name: Instalar Chromium
         run: npx playwright install --with-deps chromium
 
       - name: Rodar testes
         run: npx playwright test
+
+      - name: Juntar relatórios
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p playwright-report/health
+          cp health-results/index.html health-results/health.json playwright-report/health/ || true
 
       - name: Guardar relatório
         if: ${{ !cancelled() }}

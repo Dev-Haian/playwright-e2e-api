@@ -5,20 +5,30 @@
   "private": true,
   "scripts": {
     "test": "playwright test",
-    "test:e2e": "playwright test --project=e2e-desktop --project=e2e-mobile",
+    "test:e2e": "playwright test --project='e2e-*'",
     "test:api": "playwright test --project=api",
+    "test:unit": "playwright test --project=unit",
     "test:smoke": "playwright test --grep @smoke",
+    "test:mobile": "TEST_VIEWPORT=mobile playwright test --project='e2e-*'",
     "test:ui": "playwright test --ui",
+    "health": "tsx scripts/health-check.ts",
     "report": "playwright show-report",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": ["playwright", "typescript", "qa", "e2e", "api-testing"],
+  "keywords": [
+    "playwright",
+    "typescript",
+    "qa",
+    "e2e",
+    "api-testing"
+  ],
   "author": "Haian Vilas Boas",
   "license": "MIT",
   "devDependencies": {
     "@faker-js/faker": "^9.0.0",
     "@playwright/test": "^1.48.0",
     "@types/node": "^22.0.0",
+    "tsx": "^4.23.15",
     "typescript": "^5.6.0"
   }
 }

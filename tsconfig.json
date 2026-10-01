@@ -9,11 +9,24 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@pages/*": ["src/pages/*"],
-      "@api/*": ["src/api/*"],
-      "@fixtures/*": ["src/fixtures/*"],
-      "@data/*": ["src/data/*"]
+      "@pages/*": [
+        "src/pages/*"
+      ],
+      "@api/*": [
+        "src/api/*"
+      ],
+      "@fixtures/*": [
+        "src/fixtures/*"
+      ],
+      "@data/*": [
+        "src/data/*"
+      ]
     }
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "playwright.config.ts"]
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "playwright.config.ts",
+    "scripts/**/*.ts"
+  ]
 }
